@@ -16,13 +16,15 @@ import androidx.fragment.app.DialogFragment;
 import com.example.project2.database.LibaryDatabase;
 import com.example.project2.databinding.LibraryActivityBinding;
 import com.example.project2.dialogs.LoginAccountDialog;
+import com.example.project2.dialogs.NotifyDialog;
 import com.example.project2.dialogs.ReserveDialog;
 import com.example.project2.dialogs.SearchBooksDialog;
 import com.example.project2.models.Book;
 
 import java.util.List;
 
-public class LibraryActivity extends AppCompatActivity implements SearchBooksDialog.SearchBooksDialogListener, LoginAccountDialog.LoginAccountListener {
+public class LibraryActivity extends AppCompatActivity implements SearchBooksDialog.SearchBooksDialogListener,
+        LoginAccountDialog.LoginAccountListener, NotifyDialog.NotifyDialogListener {
     private LibraryActivityBinding binding;
     private LibaryDatabase db;
 
@@ -54,7 +56,8 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
                 DialogFragment dialogFragment = LoginAccountDialog.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "");
             } else {
-                Toast.makeText(this, "Book Reserved please pick another", Toast.LENGTH_SHORT).show();
+                DialogFragment dialogFragment = NotifyDialog.newInstance("Book Reserved please pick another");
+                dialogFragment.show(getSupportFragmentManager(), "");
             }
         });
     }
@@ -88,10 +91,6 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
     }
 
     private void generateAdapter(List<Book> bookList) {
-        if(bookList.isEmpty()) {
-            Toast.makeText(this, "No Books where found! Try a different Query", Toast.LENGTH_SHORT).show();
-            finish();
-        }
         ArrayAdapter<Book> bookArrayAdapter = new ArrayAdapter<>(this, R.layout.item_book, R.id.book_item, bookList);
         bookListView.setAdapter(bookArrayAdapter);
     }
@@ -105,6 +104,11 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
         List<Book> list;
         if(searchType.equals("Author")) list = db.books().getBooksByAuthor(searchString);
         else list = db.books().getBooksByGenre(searchString);
+        if(list.isEmpty()) {
+            DialogFragment dialogFragment = NotifyDialog.newInstance("Cannot find " + searchType);
+            dialogFragment.show(getSupportFragmentManager(), "");
+            return;
+        }
         generateAdapter(list);
     }
 
@@ -115,5 +119,10 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
         int bookID = db.books().getIdByBook(currentBook.getTitle(),currentBook.getAuthor(),currentBook.getGenre());
         DialogFragment dialogFragment = ReserveDialog.newInstance(UserID, bookID);
         dialogFragment.show(getSupportFragmentManager(), "");
+    }
+
+    @Override
+    public void onReturnToMain() {
+        finish();
     }
 }

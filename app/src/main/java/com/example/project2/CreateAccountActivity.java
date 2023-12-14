@@ -8,13 +8,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.project2.database.LibaryDatabase;
 import com.example.project2.databinding.CreateAccountActivityBinding;
+import com.example.project2.dialogs.NotifyDialog;
 import com.example.project2.models.LogEntry;
 import com.example.project2.models.User;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity implements NotifyDialog.NotifyDialogListener {
     private CreateAccountActivityBinding binding;
     private int failedAttempts = 0;
     private LibaryDatabase db;
@@ -47,10 +49,10 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
 
             db.users().insert(new User(userN, passW));
-            Toast.makeText(this, "Account created!", Toast.LENGTH_LONG).show();
             LogEntry temp = new LogEntry("Account Creation", "Created " + userN);
             db.logs().insertLog(temp);
-            finish();
+            DialogFragment dialogFragment = NotifyDialog.newInstance("Account Created!");
+            dialogFragment.show(getSupportFragmentManager(), "");
         });
     }
 
@@ -77,5 +79,10 @@ public class CreateAccountActivity extends AppCompatActivity {
             Toast.makeText(this, "Too many Failed Attempts! Try again!", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    @Override
+    public void onReturnToMain() {
+        finish();
     }
 }

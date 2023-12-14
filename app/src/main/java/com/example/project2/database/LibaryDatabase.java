@@ -10,7 +10,7 @@ import com.example.project2.models.Book;
 import com.example.project2.models.LogEntry;
 import com.example.project2.models.User;
 
-@Database(entities = {User.class, Book.class, LogEntry.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Book.class, LogEntry.class}, version = 2, exportSchema = false)
 public abstract class LibaryDatabase extends RoomDatabase {
     public abstract UserDao users();
     public abstract BookDao books();
@@ -25,6 +25,7 @@ public abstract class LibaryDatabase extends RoomDatabase {
                     .allowMainThreadQueries()
                     .build();
         }
+        if(sInstance.books().getBookCount() == 0) sInstance.populateInitialData();
         return sInstance;
     }
     public void populateInitialData() {
@@ -38,10 +39,10 @@ public abstract class LibaryDatabase extends RoomDatabase {
             books().insert(new Book("Frankenstein", "Mary Shelley", "Fiction"));
 
             // Charles Dickens books to test search by genre and by author
-            books().insert(new Book("A Tale of Two Cities", "Charles Dickens", "Classic"));
-            books().insert(new Book("Great Expectations", "Charles Dickens", "Classic"));
-            books().insert(new Book("Oliver Twist", "Charles Dickens", "Classic"));
-            books().insert(new Book("David Copperfield", "Charles Dickens", "Classic"));
+//            books().insert(new Book("A Tale of Two Cities", "Charles Dickens", "Classic"));
+//            books().insert(new Book("Great Expectations", "Charles Dickens", "Classic"));
+//            books().insert(new Book("Oliver Twist", "Charles Dickens", "Classic"));
+//            books().insert(new Book("David Copperfield", "Charles Dickens", "Classic"));
         });
     }
 

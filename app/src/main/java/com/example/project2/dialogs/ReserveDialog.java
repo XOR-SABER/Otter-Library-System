@@ -41,7 +41,7 @@ public class ReserveDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 currentBook.setHolder(currentUser.getUsername());
-                LogEntry temp = new LogEntry("Book Reserved: ", currentUser.getUsername() + " has reserved " + currentBook.getTitle() + " : Reservation Number : " + Integer.toString(reservationNum));
+                LogEntry temp = new LogEntry("Book Reserved", currentUser.getUsername() + " has reserved " + currentBook.getTitle() + " : Reservation Number : " + Integer.toString(reservationNum));
                 db.logs().insertLog(temp);
                 db.books().update(currentBook);
                 Toast.makeText(getContext(), "Reservation Success", Toast.LENGTH_SHORT).show();
