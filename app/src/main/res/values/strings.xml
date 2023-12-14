@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Otter Library System</string>
+    <string name="manage_system">Manage System</string>
+    <string name="place_hold">Place Hold</string>
+    <string name="create_account">Create Account</string>
+    <string name="go_back">Go back</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="create_an_account">Create an account for the Otter Library System</string>
+    <string name="by_author">Search By Author</string>
+    <string name="by_genre">Search By Genre</string>
+    <string name="search">Search</string>
+    <string name="search_by">Search by</string>
+    <string name="no_books">No Books found</string>
+    <string name="refresh_page">Refresh Page</string>
+    <string name="login_text">Login into the Otter library to reserve the book</string>
+    <string name="login">Login</string>
+    <string name="reserve_book">Reserve book?</string>
+    <string name="show_held">Show Held</string>
+    <string name="otter_library_administrator_login">Otter Library Administrator login</string>
+    <string name="add_book">Add book</string>
+    <string name="show_logs">Show all Logs</string>
+    <string name="clear_reservations">Clear Reservations</string>
+    <string name="show_all_reservations">Show all Reservations</string>
+    <string name="add_a_book">Add a book to the Otter Library System</string>
+    <string name="title">title</string>
+    <string name="author">author</string>
+    <string name="genre">genre</string>
+</resources>
