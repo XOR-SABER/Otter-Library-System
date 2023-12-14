@@ -18,6 +18,7 @@ import com.example.project2.databinding.ManageActivityBinding;
 import com.example.project2.dialogs.AddBookDialog;
 import com.example.project2.dialogs.BookDialog;
 import com.example.project2.dialogs.SearchBooksDialog;
+import com.example.project2.dialogs.returnDialog;
 import com.example.project2.models.Book;
 import com.example.project2.models.LogEntry;
 
@@ -60,6 +61,11 @@ public class ManageActivity extends AppCompatActivity implements AddBookDialog.B
             } else {
                 currentState = "ShowAllHolds";
                 Log.i("current state is : " , currentState);
+                binding.showAll.setOnItemClickListener((parent, view, position, id) -> {
+                    Book currentBook = (Book) manageListView.getItemAtPosition(position);
+                    DialogFragment dialogFragment = returnDialog.newInstance(currentBook.getId());
+                    dialogFragment.show(getSupportFragmentManager(), "");
+                });
                 updateList();
             }
         });
