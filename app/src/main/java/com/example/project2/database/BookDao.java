@@ -33,6 +33,11 @@ public interface BookDao {
     @Query("SELECT * FROM books WHERE genre = :genre")
     List<Book> getBooksByGenre(String genre);
 
+    @Query("SELECT * FROM books WHERE genre = :genre AND holder IS NULL OR holder = ''" )
+    List<Book> getAvaliableBooksByGenre(String genre);
+    @Query("SELECT * FROM books WHERE author = :author AND holder IS NULL OR holder = ''" )
+    List<Book> getAvaliableBooksByAuthor(String author);
+
     @Query("SELECT * FROM books WHERE holder = :holder")
     List<Book> getBooksByHolder(String holder);
 

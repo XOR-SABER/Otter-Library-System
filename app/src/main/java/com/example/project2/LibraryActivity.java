@@ -5,12 +5,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project2.database.LibaryDatabase;
@@ -52,13 +55,10 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
         });
         bookListView.setOnItemClickListener((parent, view, position, id) -> {
             currentBook = (Book) bookListView.getItemAtPosition(position);
-            if(currentBook.getHolder() == null) {
-                DialogFragment dialogFragment = LoginAccountDialog.newInstance();
-                dialogFragment.show(getSupportFragmentManager(), "");
-            } else {
-                DialogFragment dialogFragment = NotifyDialog.newInstance("Book Reserved please pick another");
-                dialogFragment.show(getSupportFragmentManager(), "");
-            }
+            DialogFragment dialogFragment;
+            if(currentBook.getHolder() == null) dialogFragment = LoginAccountDialog.newInstance();
+            else dialogFragment = NotifyDialog.newInstance("Book Reserved please pick another");
+            dialogFragment.show(getSupportFragmentManager(), "");
         });
     }
 
@@ -66,6 +66,14 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.manage_menu, menu);
+        MenuItem item = menu.findItem(R.id.mySwitch);
+        item.setActionView(R.layout.switch_layout);
+        SwitchCompat mySwitch = item.getActionView().findViewById(R.id.switchForActionBar);
+        mySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            heldIsShown = isChecked;
+            if(heldIsShown) generateAdapter(db.books().getAllBooks());
+            else generateAdapter(db.books().getBooksWithoutHolder());
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -74,17 +82,6 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
         if (item.getItemId() == R.id.back_button) {
             finish();
             return true;
-        }
-        if (item.getItemId() == R.id.show_held) {
-            if(heldIsShown) {
-                heldIsShown = false;
-                allBooks = db.books().getBooksWithoutHolder();
-                generateAdapter(allBooks);
-            } else {
-                heldIsShown = true;
-                allBooks = db.books().getAllBooks();
-                generateAdapter(allBooks);
-            }
         }
         return super.onOptionsItemSelected(item);
 
@@ -102,8 +99,15 @@ public class LibraryActivity extends AppCompatActivity implements SearchBooksDia
     @Override
     public void onSearchClicked(String searchType, String searchString) {
         List<Book> list;
-        if(searchType.equals("Author")) list = db.books().getBooksByAuthor(searchString);
-        else list = db.books().getBooksByGenre(searchString);
+        if(searchType.equals("Author")) {
+
+            if (heldIsShown) list = db.books().getBooksByAuthor(searchString);
+            else list = db.books().getAvaliableBooksByAuthor(searchString);
+        }
+        else {
+            if (heldIsShown) list = db.books().getBooksByGenre(searchString);
+            else list = db.books().getAvaliableBooksByGenre(searchString);
+        }
         if(list.isEmpty()) {
             DialogFragment dialogFragment = NotifyDialog.newInstance("Cannot find " + searchType);
             dialogFragment.show(getSupportFragmentManager(), "");

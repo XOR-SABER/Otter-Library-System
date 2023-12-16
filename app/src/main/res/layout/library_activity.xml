@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:text="@string/by_author"
             android:layout_margin="10dp"/>
+
     </LinearLayout>
 
     <ListView

@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    <item-->
+<!--        android:id="@+id/show_held"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--        android:title="@string/show_held" />-->
     <item
-        android:id="@+id/show_held"
-        app:showAsAction="ifRoom"
-        android:title="@string/show_held" />
+        android:id="@+id/mySwitch"
+        android:title=""
+        android:actionLayout="@layout/switch_layout"
+        app:showAsAction="always" />
     <item
         android:id="@+id/back_button"
         android:icon="@android:drawable/ic_menu_revert"
         android:title="@string/go_back"
         app:showAsAction="always" />
-
 </menu>
